@@ -1,47 +1,29 @@
-pipeline {
-    agent any  // Use any available agent
+ipeline {
+    agent any
 
     tools {
-        maven 'Maven'  // Ensure this matches the name configured in Jenkins
+        maven 'Maven_3.8.7'
+        jdk 'JDK_17'
     }
+
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/vikasreddy828/MavenMigration.git'
+                git 'https://github.com/vikasreddy828/TomCat.git'
             }
         }
 
-        stage('Build') {
+        stage('Build WAR') {
             steps {
-                sh 'mvn clean package'  // Run Maven build
+                sh 'mvn clean package'
             }
         }
 
-        stage('Test') {
+        stage('Deploy WAR') {
             steps {
-                sh 'mvn test'  // Run unit tests
+                // Replace with your actual remote details
+                sh 'scp target/my-webapp.war user@your-server:/path/to/tomcat/webapps/'
             }
-        }
-
-        
-        
-       
-        stage('Run Application') {
-            steps {
-                // Start the JAR application
-                sh 'java -jar target/MyMavenApp2-1.0-SNAPSHOT.jar'
-            }
-        }
-
-        
-    }
-
-    post {
-        success {
-            echo 'Build and deployment successful!'
-        }
-        failure {
-            echo 'Build failed!'
         }
     }
 }
